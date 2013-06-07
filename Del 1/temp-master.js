@@ -45,7 +45,6 @@
     }
 
     function IncludeTemplate (text, pathExtention) {
-        debugger;
 
         var includeIndex = text.indexOf("{include");
         var endPos = text.indexOf('}',includeIndex);
