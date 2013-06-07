@@ -27,16 +27,38 @@
         return this.each(function(){
             (new $.tempMaster(this, pathToTemplate, options));
 
-		    xmlhttp = new XMLHttpRequest();
-            xmlhttp.overrideMimeType('text/plain');
-            xmlhttp.open("GET",pathToTemplate,false);
-            xmlhttp.send(null); 
-            var fileContent = xmlhttp.responseText;
+		    var fileContent = GetFileContent(pathToTemplate);
 
+            while(IncludesLeft(fileContent)){
+                fileContent = IncludeTemplate(fileContent);
+            }
+
+            //fileContent = fileContent.replace(text_to_get, "bahh");            
 
 		   $(this).append(fileContent);
 		   
         });
     };
     
+    function IncludesLeft (text) {
+        return text.indexOf("{include") >= 0;
+    }
+
+    function IncludeTemplate (text) {
+        debugger;
+        var includeIndex = text.indexOf("{include");
+        var endPos = text.indexOf('}',includeIndex);
+        var includeSyntaxToReplace = text.substring(includeIndex, endPos+1);
+        var pathToTemplate = text.substring(includeIndex+9,endPos);
+        pathToTemplate = text.replace(includeSyntaxToReplace, GetFileContent(pathToTemplate));
+        return pathToTemplate;
+    }
+
+    function GetFileContent (pahtToFile) {
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.overrideMimeType('text/plain');
+        xmlhttp.open("GET",pahtToFile,false);
+        xmlhttp.send(null); 
+        return xmlhttp.responseText;
+    }
 })(jQuery);
