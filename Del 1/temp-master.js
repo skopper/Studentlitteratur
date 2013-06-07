@@ -44,14 +44,26 @@
         return text.indexOf("{include") >= 0;
     }
 
-    function IncludeTemplate (text) {
+    function IncludeTemplate (text, pathExtention) {
         debugger;
+
         var includeIndex = text.indexOf("{include");
         var endPos = text.indexOf('}',includeIndex);
         var includeSyntaxToReplace = text.substring(includeIndex, endPos+1);
+        
         var pathToTemplate = text.substring(includeIndex+9,endPos);
-        pathToTemplate = text.replace(includeSyntaxToReplace, GetFileContent(pathToTemplate));
-        return pathToTemplate;
+        if(arguments.length === 2 ){
+            pathToTemplate = pathExtention +"/"+ pathToTemplate;
+        }
+        var fileContent = text.replace(includeSyntaxToReplace, GetFileContent(pathToTemplate));
+        if(IncludesLeft(fileContent)){
+            var pathToFolder = pathToTemplate.substring(0, pathToTemplate.lastIndexOf("/"));
+            return IncludeTemplate(fileContent, pathToFolder);
+        }
+        else{
+            return fileContent;
+        }
+            
     }
 
     function GetFileContent (pahtToFile) {
