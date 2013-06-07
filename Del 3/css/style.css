@@ -1,0 +1,35 @@
+body{
+	background: #8CC752;
+	font-family: "Comic Sans", "calibri", serif; 
+}
+
+div{
+	margin: 40px auto;
+	width: 400px;
+	background: white;
+	padding: 30px 70px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+h1{
+
+	font-size: 2em;
+
+}
+ul{
+	display: inline;
+	width: 100%;
+	overflow: auto;
+	list-style-type: none;
+}
+
+li{
+	white-space: nowrap;
+	width: 100px;
+	padding: 10px;
+	background: #8CC752;
+	margin: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
