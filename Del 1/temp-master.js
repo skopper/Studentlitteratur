@@ -29,10 +29,11 @@
 
 		    var fileContent = GetFileContent(pathToTemplate);
 
-            while(IncludesLeft(fileContent)){
-                fileContent = IncludeTemplate(fileContent);
-            }
 
+//            while(IncludesLeft(fileContent)){
+  //              fileContent = IncludeTemplate(fileContent);
+    //        }
+            fileContent = IncludeATemplate(fileContent);
             //fileContent = fileContent.replace(text_to_get, "bahh");            
 
 		   $(this).append(fileContent);
@@ -46,15 +47,11 @@
 
     function IncludeTemplate (text, pathExtention) {
 
-        var includeIndex = text.indexOf("{include");
-        var endPos = text.indexOf('}',includeIndex);
-        var includeSyntaxToReplace = text.substring(includeIndex, endPos+1);
+       
         
-        var pathToTemplate = text.substring(includeIndex+9,endPos);
-        if(arguments.length === 2 ){
-            pathToTemplate = pathExtention +"/"+ pathToTemplate;
-        }
-        var fileContent = text.replace(includeSyntaxToReplace, GetFileContent(pathToTemplate));
+        
+
+        
         if(IncludesLeft(fileContent)){
             var pathToFolder = pathToTemplate.substring(0, pathToTemplate.lastIndexOf("/"));
             return IncludeTemplate(fileContent, pathToFolder);
@@ -63,6 +60,34 @@
             return fileContent;
         }
             
+    }
+
+    function IncludeATemplate(text){
+        IncludeATemplateRec("",text);
+    }
+
+    function IncludeATemplateRec (path, text) {
+        
+        if(!IncludesLeft(text)){
+            return text;
+        }else{
+            //Get position of eg {include animals/animals.html}
+            var includeIndex = text.indexOf("{include");
+            var endPos = text.indexOf('}',includeIndex);
+            var includeSyntaxToReplace = text.substring(includeIndex, endPos+1);
+
+            //Check if other path needs to be prepended
+            var pathToTemplate = text.substring(includeIndex+9,endPos);
+            if(path != "" ){
+                pathToTemplate = path +"/"+ pathToTemplate;
+            }
+
+
+            //Get the file content
+            var fileContent = text.replace(includeSyntaxToReplace, GetFileContent(pathToTemplate));
+
+            IncludeATemplateRec(pathToTemplate.substring(0, pathToTemplate.lastIndexOf("/")), fileContent)
+        }
     }
 
     function GetFileContent (pahtToFile) {
